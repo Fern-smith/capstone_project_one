@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css')}}"
+    />
+    <title>{% block title%} ME-COOKBOOK {% endblock %}</title>
+  </head>
+  <body>
+    <header class="header">
+      <nav class="nav">
+        <div class="logo">ME-COOKBOOK</div>
+        <ul class="nav-links">
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('search') }}">Search</a></li>
+          <li><a href="{{ url_for('create_recipe') }}">Submit Recipe</a></li>
+          {% if session.user_id %}
+          <li class="user-dropdown">
+            <span class="user-menu-trigger">
+              👤 {{ session.user_email.split('@')[0].title() }} ▼
+            </span>
+            <div class="user-dropdown-content">
+              <div class="dropdown-header">{{ session.user_email }}</div>
+              <a href="{{ url_for('home') }}">My Dashboard </a>
+              <a href="{{ url_for('create_recipe') }}">Create Recipe</a>
+              <a href="{{ url_for('search') }}">My Recipes</a>
+              <a href="#" onclick="alert('Profile feature coming soon!')"
+                >Profile Settings</a
+              >
+              <a href="{{ url_for('logout') }}" class="logout-link">Log Out</a>
+            </div>
+          </li>
+          {% else %}
+          <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+          <li><a href="{{ url_for('login') }}">Log In</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </header>
+    <main class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
+    </main>
+
+    {% block footer %}
+    <footer class="footer">
+      <div class="footer-content">
+        <div>
+          <h4>About</h4>
+          <p>
+            This is a Me-cook app that creates recipes with Python and Flask,
+            enhanced with Spoonacular API for discovering new recipes.
+          </p>
+        </div>
+        <div>
+          <h4>Contact Us</h4>
+          <div class="social-links">
+            <a href="https://www.facebook.com/" target="_blank">Facebook</a>
+            <a href="https://www.instagram.com/" target="_blank">Instragram</a>
+            <a href="https://youtube.com/" target="_blank">Youtube</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    {% endblock %}
+  </body>
+</html>

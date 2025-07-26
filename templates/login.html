@@ -1,0 +1,27 @@
+{% extends "base.html" %} {% block content %}
+<div class="main-content">
+  <h1 class="white-title-blue-bg">Welcome back, Log In</h1>
+
+  <form class="form-content" method="POST">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+    </div>
+
+    <div class="form-group">
+      <label for="password"> Password</label>
+      <input type="password" id="password" name="password" required />
+    </div>
+
+    <button type="submit" class="btn">Log In</button>
+
+    <div class="content">
+      <p>
+        Do not have an account yet?
+        <a href="{{ url_for('signup')}}"> Sign up here </a>
+      </p>
+      <p>Forget your password? <a href="#">Reset it here</a></p>
+    </div>
+  </form>
+</div>
+{% endblock %}

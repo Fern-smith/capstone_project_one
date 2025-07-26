@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-content">
+    <h1>Search Results</h1>
+    
+    <!-- Search Form -->
+    <form action="{{ url_for('search') }}" method="GET" class="search-form">
+        <div class="search-box">
+            <input type="text" name="q" class="search-input" placeholder="Search recipes..." value="{{ query }}">
+            <button type="submit" class="search-btn">Search</button>
+        </div>
+    </form>
+
+    {% if query %}
+        <p class="search-info">Search results for: "<strong>{{ query }}</strong>"</p>
+        
+        <!-- Local Results -->
+        {% if search_results.local %}
+            <div class="search-section">
+                <h2>Your Saved Recipes</h2>
+                <div class="recipe-grid">
+                    {% for recipe in search_results.local %}
+                    <a href="{{ url_for('recipe_detail', recipe_id=recipe[0]) }}" class="recipe-card">
+                        <div class="recipe-image">
+                            {% if recipe[5] %}
+                                <img src="{{ url_for('static', filename='uploads/' + recipe[5]) }}" alt="{{ recipe[1] }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+                            {% else %}
+                                <div class="placeholder-image">Recipe Image</div>
+                            {% endif %}
+                        </div>
+                        <div class="recipe-title">{{ recipe[1] }}</div>
+                        <div class="recipe-description">
+                            {% if recipe[2] %}
+                                {{ recipe[2][:100] }}...
+                            {% else %}
+                                No description available
+                            {% endif %}
+                        </div>
+                        <div class="recipe-source">
+                            {% if recipe[8] %}
+                                By: {{ recipe[8] }}
+                            {% else %}
+                                From Spoonacular
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <!-- API Results -->
+        {% if search_results.api %}
+            <div class="search-section">
+                <h2>Discover New Recipes</h2>
+                <div class="recipe-grid">
+                    {% for recipe in search_results.api %}
+                    <a href="{{ url_for('api_recipe_detail', spoonacular_id=recipe.id) }}" class="recipe-card api-recipe">
+                        <div class="recipe-image">
+                            {% if recipe.image %}
+                                <img src="{{ recipe.image }}" alt="{{ recipe.title }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
+                            {% else %}
+                                <div class="placeholder-image">Recipe Image</div>
+                            {% endif %}
+                        </div>
+                        <div class="recipe-title">{{ recipe.title }}</div>
+                        <div class="recipe-description">
+                            {% if recipe.summary %}
+                                {{ (recipe.summary | striptags)[:100] }}...
+                            {% else %}
+                                Delicious recipe from Spoonacular
+                            {% endif %}
+                        </div>
+                        <div class="recipe-source api-source">
+                            <span class="api-badge">Spoonacular</span>
+                            {% if recipe.readyInMinutes %}
+                                <span class="cook-time">{{ recipe.readyInMinutes }} min</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        {% if not search_results.local and not search_results.api %}
+            <div class="no-results">
+                <p>No recipes found for "{{ query }}". Try a different search term or <a href="{{ url_for('create_recipe') }}">create your own recipe</a>!</p>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="search-prompt">
+            <p>Enter a search term to find recipes from your collection or discover new ones!</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
