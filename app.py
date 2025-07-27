@@ -9,23 +9,47 @@ import requests
 from datetime import datetime
 import json
 from functools import wraps
+from urllib.parse import urlparse
+
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-change-this-in-production'
+app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-change-this-in-production')
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
-# PostgreSQL configuration - UPDATE THESE VALUES
-DATABASE_CONFIG = {
-    'host': 'localhost',
-    'database': 'recipes_db',
-    'user': 'recipe_user',
-    'password': 'me-cookbook-app',  # Use the password you set
-    'port': 5432
-}
+# Database configuration
+if 'DATABASE_URL' in os.environ:
+    # Production (Render, Heroku, etc.)
+    DATABASE_URL = os.environ['DATABASE_URL']
+    # Parse the URL
+    url = urlparse(DATABASE_URL)
+    DATABASE_CONFIG = {
+        'host': url.hostname,
+        'database': url.path[1:],
+        'user': url.username,
+        'password': url.password,
+        'port': url.port or 5432,
+        'sslmode': 'require'  # Required for most cloud providers
+    }
+    print(f"🐘 Using production database: {url.hostname}")
+else:
+    # Local development - PostgreSQL
+    DATABASE_CONFIG = {
+        'host': os.environ.get('DB_HOST', 'localhost'),
+        'database': os.environ.get('DB_NAME', 'recipes_db'),
+        'user': os.environ.get('DB_USER', 'recipe_user'),
+        'password': os.environ.get('DB_PASSWORD', 'me-cookbook-app'),
+        'port': int(os.environ.get('DB_PORT', 5432))
+    }
+    print("🐘 Using local development database")
 
 # Spoonacular API configuration
-SPOONACULAR_API_KEY = '91a22d8724d04a57a89907d9a9c415e1'
+SPOONACULAR_API_KEY = os.environ.get('SPOONACULAR_API_KEY')
 SPOONACULAR_BASE_URL = 'https://api.spoonacular.com/recipes'
+
+if not SPOONACULAR_API_KEY:
+    print("⚠️  Warning: SPOONACULAR_API_KEY not set. API features will be disabled.")
 
 # Ensure upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -134,6 +158,10 @@ def init_db():
 # Spoonacular API functions
 def search_recipes_api(query, number=12):
     """Search recipes using Spoonacular API"""
+    if not SPOONACULAR_API_KEY:
+        print("⚠️  Spoonacular API key not configured")
+        return None
+        
     try:
         url = f"{SPOONACULAR_BASE_URL}/complexSearch"
         params = {
@@ -152,6 +180,10 @@ def search_recipes_api(query, number=12):
 
 def get_recipe_details_api(recipe_id):
     """Get detailed recipe information from Spoonacular API"""
+    if not SPOONACULAR_API_KEY:
+        print("⚠️  Spoonacular API key not configured")
+        return None
+        
     try:
         url = f"{SPOONACULAR_BASE_URL}/{recipe_id}/information"
         params = {
@@ -559,11 +591,11 @@ if __name__ == '__main__':
     try:
         app.run(
             debug=True,
-            host='127.0.0.1',
-            port=8080,  # Using 8080 to avoid conflicts
+            host='0.0.0.0',  # Changed to 0.0.0.0 for deployment
+            port=int(os.environ.get('PORT', 8080)),
             use_reloader=False
         )
     except Exception as e:
         print(f"❌ Error starting Flask: {e}")
         print("💡 Trying alternative port...")
-        app.run(debug=True, host='127.0.0.1', port=8081)
+        app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8081)))
