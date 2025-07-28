@@ -8,6 +8,7 @@ import os
 import requests
 from datetime import datetime
 import json
+import time
 from functools import wraps
 from urllib.parse import urlparse
  
@@ -20,7 +21,6 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # Database configuration
 if 'DATABASE_URL' in os.environ:
-    # Production (Render, Heroku, etc.)
     DATABASE_URL = os.environ['DATABASE_URL']
     # Parse the URL
     url = urlparse(DATABASE_URL)

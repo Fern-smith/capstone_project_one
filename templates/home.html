@@ -21,7 +21,7 @@
         placeholder="Search recipes..."
         value="{{ request.args.get('q', '') }}"
       />
-      <button type="submit" class="search-btn">Search</button>
+      <button type="submit" class="search-btn" onclick="this.innerHTML='Searching...">Search</button>
     </div>
   </form>
 

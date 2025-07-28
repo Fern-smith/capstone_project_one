@@ -19,9 +19,13 @@
           <li><a href="{{ url_for('create_recipe') }}">Submit Recipe</a></li>
           {% if session.user_id %}
           <li class="user-dropdown">
-            <span class="user-menu-trigger">
+            <button
+              class="user-menu-trigger"
+              aria-label="User menu"
+              aria-expanded="false"
+            >
               👤 {{ session.user_email.split('@')[0].title() }} ▼
-            </span>
+            </button>
             <div class="user-dropdown-content">
               <div class="dropdown-header">{{ session.user_email }}</div>
               <a href="{{ url_for('home') }}">My Dashboard </a>
