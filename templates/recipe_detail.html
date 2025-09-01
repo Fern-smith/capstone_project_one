@@ -1,49 +1,82 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="main-content">
-    <h1>Recipe Detail</h1>
-    
-    <div class="recipe-detail-grid">
-        <div>
-            <h2>{{ recipe[1] }}</h2>
-            <p class="recipe-author">Author Info: {{ recipe[8] if recipe[8] else 'From Spoonacular' }}</p>
-            <p class="recipe-info">{{ recipe[2] if recipe[2] else 'No description available' }}</p>
-            
-            <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-                <strong>Nutrition Info</strong>
-            </div>
-            
-            <div>
-                <h3>Ingredients</h3>
-                <div class="details">
-                    <pre>{{ recipe[3] }}</pre>
-                </div>
-            </div>
-            
-            <div>
-                <h3>Steps</h3>
-                <div class="details">
-                    <pre>{{ recipe[4] }}</pre>
-                </div>
-            </div>
-            
-            {% if session.user_id == recipe[6] %}
-                <div class="recipe-session">
-                    <a href="{{ url_for('edit_recipe', recipe_id=recipe[0]) }}" class="btn btn-primary">Edit Recipe</a>
-                </div>
-            {% endif %}
+  <h1>Recipe Detail</h1>
+
+  <div class="recipe-detail-grid">
+    <div>
+      <h2>{{ recipe[1]| clean_html }}</h2>
+      <p class="recipe-author">
+        Author Info: {{ recipe[8] if recipe[8] else 'From Spoonacular' }}
+      </p>
+      <p class="recipe-info">
+        {{ (recipe[2] | clean_html) if recipe[2] else 'No description available'
+        }}
+      </p>
+
+      <div
+        style="
+          background: #f8f9fa;
+          padding: 15px;
+          border-radius: 5px;
+          margin-bottom: 20px;
+        "
+      >
+        <strong>Nutrition Info</strong>
+      </div>
+
+      <div>
+        <h3>Ingredients</h3>
+        <div class="details">
+          <pre>{{ recipe[3] | clean_html }}</pre>
         </div>
-        
-        <div>
-            <div class="image-session">
-                {% if recipe[5] %}
-                    <img src="{{ url_for('static', filename='uploads/' + recipe[5]) }}" alt="{{ recipe[1] }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">
-                {% else %}
-                    <div class="placeholder-image">Recipe Image</div>
-                {% endif %}
-            </div>
+      </div>
+
+      <div>
+        <h3>Steps</h3>
+        <div class="details">
+          <pre>{{ recipe[4] | clean_html }}</pre>
         </div>
+      </div>
+
+      {% if session.user_id == recipe[6] %}
+      <div class="recipe-session">
+        <a
+          href="{{ url_for('edit_recipe', recipe_id=recipe[0]) }}"
+          class="btn btn-primary"
+          >Edit Recipe</a
+        >
+      </div>
+      {% endif %}
     </div>
+
+    <div>
+      <div class="image-session">
+        {% if recipe.image_url%}
+        <img
+          src="{{ recipe.image_url }}"
+          alt="{{ recipe[1] | clean_html }}"
+          style="
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+          "
+          onerror="this.style.display='none' ; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="placeholder-image" style="display: none; height: 300px">
+          Recipe Image
+          <div class="icon">📷</div>
+          <div class="text">Image could not be loaded</div>
+        </div>
+        {% else %}
+        <div class="placeholder-image" style="height: 300px">
+          Recipe Image
+          <div class="icon">📷</div>
+          <div class="text">No Image Available</div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

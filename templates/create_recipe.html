@@ -1,37 +1,53 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="main-content">
-    <h1 style="text-align: center; margin-bottom: 30px;">Create Recipe</h1>
-    
-    <form method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="title">Recipe Title</label>
-            <input type="text" id="title" name="title" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea id="description" name="description"></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label for="image">Select an Image</label>
-            <input type="file" id="image" name="image" accept="image/*">
-        </div>
-        
-        <div class="form-group">
-            <label for="ingredients">Ingredients</label>
-            <textarea id="ingredients" name="ingredients" rows="8" required></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label for="steps">Steps</label>
-            <textarea id="steps" name="steps" rows="10" required></textarea>
-        </div>
-        
-        <button type="submit" class="btn btn-primary">Create Recipe</button>
-        <a href="{{ url_for('home') }}" class="btn">Cancel</a>
-    </form>
+  <h1 style="text-align: center; margin-bottom: 30px">Create Recipe</h1>
+
+  <form method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="title">Recipe Title</label>
+      <input type="text" id="title" name="title" required />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        placeholder="Tell us about this recipe..."
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <label for="image">Select an Image</label>
+      <input type="file" id="image" name="image" accept="image/*" />
+      <small style="color: #6c757d; font-size: 12px">
+        Supported formats: JPG, PNG, GIF, WebP. Max size recommended: 5MB
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="ingredients">Ingredients</label>
+      <textarea
+        id="ingredients"
+        name="ingredients"
+        rows="8"
+        required
+        placeholder="• 2 cups flour&#10;• 1 tsp salt&#10;• 3 eggs"
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="steps">Steps</label>
+      <textarea
+        id="steps"
+        name="steps"
+        rows="10"
+        required
+        placeholder="1. Preheat oven to 350°F&#10;2. Mix dry ingredients&#10;3. Add wet ingredients"
+      ></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Recipe</button>
+    <a href="{{ url_for('home') }}" class="btn">Cancel</a>
+  </form>
 </div>
 {% endblock %}

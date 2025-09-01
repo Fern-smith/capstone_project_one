@@ -1,32 +1,50 @@
-{% extends "base.html"%}
-
-{%block content%}
+{% extends "base.html" %} {% block content %}
 <div class="main-content">
-    <h1>Sign Up </h1>
-    <form class="form-content" method="POST">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required aria-describedby="email-error" autocomplete="email">
-            <div id="email-error" class="error-message" style="display: none;"></div>
-        </div>
+  <h1>Sign Up</h1>
 
-        <div class="form-group">
-            <label for="password"> Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>    
+  <form class="form-content" method="POST">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        autocomplete="email"
+      />
+    </div>
 
-        <div class="form-group">
-            <label for="confirm_password"> Repeat Password</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
-        </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        required
+        autocomplete="new-password"
+      />
+    </div>
 
-        <button type="submit" class="btn">Sign Up</button>
+    <div class="form-group">
+      <label for="confirm_password">Repeat Password</label>
+      <input
+        type="password"
+        id="confirm_password"
+        name="confirm_password"
+        required
+        autocomplete="new-password"
+      />
+    </div>
 
-        <div class="signup-text">
-            <p> Already have an account? <a href="{{ url_for('login')}}"> Log in here</a></p>
-            <p> Forgot your password? <a href="#">Reset it here</a></p>
-        </div>
-    </form>
+    <button type="submit" class="btn">Sign Up</button>
+
+    <div class="signup-text">
+      <p>
+        Already have an account? <a href="{{ url_for('login')}}">Log in here</a>
+      </p>
+      <p>Forgot your password? <a href="#">Reset it here</a></p>
+    </div>
+  </form>
 </div>
 {% endblock %}
 

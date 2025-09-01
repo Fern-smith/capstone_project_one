@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} 
+{% block content %}
+
 <div class="main-content">
   {% if session.user_id %}
   <div class="welcome-banner">
@@ -21,7 +23,7 @@
         placeholder="Search recipes..."
         value="{{ request.args.get('q', '') }}"
       />
-      <button type="submit" class="search-btn" onclick="this.innerHTML='Searching...">Search</button>
+      <button type="submit" class="search-btn">Search</button>
     </div>
   </form>
 
@@ -33,37 +35,43 @@
       </h2>
       <div class="recipe-grid">
         {% for recipe in featured_recipes %}
-        <a
-          href="{{ url_for('recipe_detail', recipe_id=recipe[0]) }}"
-          class="recipe-card"
-        >
+        <a href="{{ url_for('recipe_detail', recipe_id=recipe[0]) }}" class="recipe-card">
           <div class="recipe-image">
-            {% if recipe[5] %}
+            {% if recipe.image_url %}
             <img
-              src="{{ url_for('static', filename='uploads/' + recipe[5]) }}"
-              alt="{{ recipe[1] }}"
-              style="
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 5px;
-              "
+              src="{{ recipe.image_url }}"
+              alt="{{ recipe[1]| clean_html }}"
+              style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
+            <div class="placeholder-image" style="display: none;">
+                <div class="icon">📷</div>
+                <div class="text">Image not available</div>
+            </div>
             {% else %}
-            <div class="placeholder-image">Recipe Image</div>
+            <div class="placeholder-image">
+                <div class="icon">📷</div>
+                <div class="text">No Image</div>
+            </div>  
             {% endif %}
           </div>
-          <div class="recipe-title">{{ recipe[1] }}</div>
+          <div class="recipe-title">{{ recipe[1] | clean_html }}</div>
           <div class="recipe-description">
-            {% if recipe[2] %} {{ recipe[2][:100] }}... {% else %} No
-            description available {% endif %}
+            {% if recipe[2] %} 
+              {{ (recipe[2] | clean_html)[:100] }}...
+            {% else %} 
+              No description available 
+            {% endif %}
           </div>
           <div class="recipe-source">
-            {% if recipe[8] %} By: {{ recipe[8] }} {% else %} From Spoonacular
+            {% if recipe[8] %} By: {{ recipe[8] | clean_html }} {% else %} From Spoonacular
             {% endif %}
           </div>
         </a>
-        {% endfor %} {% if not featured_recipes %}
+        {% endfor %} 
+        
+        {% if not featured_recipes %}
         <div class="no-recipes">
           <p>
             No recipes yet.
@@ -88,3 +96,4 @@
   </div>
 </div>
 {% endblock %}
+
