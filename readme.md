@@ -137,8 +137,6 @@ In PostgreSQL shell:
 me-cookbook/
 ├── app.py                 # Main Flask application
 ├── requirements.txt       # Python dependencies
-├── Procfile              # Heroku deployment configuration
-├── runtime.txt           # Python version specification
 ├── README.md             # Project documentation
 ├── static/
 │   ├── css/
@@ -154,6 +152,8 @@ me-cookbook/
 │   ├── recipe_detail.html # Individual recipe display
 │   ├── edit_recipe.html  # Recipe editing form
 │   └── api_recipe_detail.html # External recipe display
+│   └── 404.html # Error page
+│   └── 500.html # Internal Server Error
 └── .gitignore            # Git ignore file
 ```   
 
