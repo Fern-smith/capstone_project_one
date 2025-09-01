@@ -10,7 +10,7 @@ Werkzeug>=3.0.0
 
 #Image Processing 
 Pillow>=10.0.0
-nump>=1.21.0, <2.0.0
+numpy>=1.21.0, <2.0.0
 
 #Production Server
 gunicorn>=20.0.0
