@@ -1,16 +1,20 @@
-Flask==3.0.3
-psycopg2-binary==2.9.9
-python-dotenv==1.0.0
-requests==2.32.4
-Werkzeug==3.0.6
-Jinja2==3.1.6
-MarkupSafe==2.1.5
-blinker==1.8.2
-click==8.1.8
-itsdangerous==2.2.0
-gunicorn==23.0.0
-certifi==2024.8.30
-charset-normalizer==3.4.2
-idna==3.10
-packaging==25.0
-urllib3==2.2.3
+
+#Core Flask and Database 
+Flask>=3.0.0
+psycopg2-binary>=2.9.0
+python-dotenv>=1.0.0
+
+#Web and Security
+requests>=2.30.0
+Werkzeug>=3.0.0
+
+#Image Processing 
+Pillow>=10.0.0
+nump>=1.21.0, <2.0.0
+
+#Production Server
+gunicorn>=20.0.0
+
+
+boto3>=1.30.0
+
